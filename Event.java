@@ -1,37 +1,64 @@
-public class Event{
+public class Event implements Comparable{
 
-	private String _n, _d, _start, _end;
-	private int _k;
-
-	public Event(String name, String description, String startTime, String endTime, int key){
-		_n = name;
-		_d = description;
-		_start = startTime;
-		_end = endTime;
-		_k = key;
+	private String _event;
+	private int _month, _day, _startHr, _endHr, _priority;
+	
+	public Event(String event, int month, int day, int start, int end, int priority){
+		_event = event;
+		_month = month;
+		_day = day;
+		_startHr = start;
+		_endHr = end;
+		_priority = priority;
+	}
+	
+	public Event(String event, int month, int day, int start, int end){
+		_event = event;
+		_month = month;
+		_day = day;
+		_startHr = start;
+		_endHr = end;
+		_priority = 5;
+	}
+	
+	public String getEvent(){
+		return _event;
+	}
+	
+	public int getMonth(){
+		return _month;
+	}
+	
+	public int getDay(){
+		return _day;
+	}
+	
+	public int getStart(){
+		return _startHr;
+	}
+	
+	public int getEnd(){
+		return _endHr;
+	}
+	
+	public int getPriority(){
+		return _priority;
+	}
+	
+	// compareTo override
+	// negative is higher priority (i.e day 1 is earlier than day 17)
+	public int compareTo(Event rhs){
+		if(getMonth() != rhs.getMonth())
+			return getMonth() - rhs.getMonth();
+		else if(getDay() != rhs.getDay())
+			return getDay() - rhs.getDay();
+		else if(getPriority() != rhs.getPriority())
+			return getPriority() - rhs.getPriority();
+		else if(getStart() != rhs.getStart())
+			return getStart() - rhs.getStart();
+		else if(getEnd() != rhs.getEnd())
+			return getEnd() - rhs.getEnd();
+		return 0;
 	}
 
-	public Event(String name, String startTime, String endTime, int key){
-		this(name, null, startTime, endTime, key);
-	}
-
-	public String getName(){
-		return _n;
-	}
-
-	public String getStartTime(){
-		return _start;
-	}
-
-	public String getEndTime(){
-		return _end;
-	}
-
-	public int getKey(){
-		return _k;
-	}
-
-	public String toString(){
-		return getName();
-	}
 }
