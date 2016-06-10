@@ -47,6 +47,7 @@ public class Event implements Comparable{
 	
 	// compareTo override
 	// negative is higher priority (i.e day 1 is earlier than day 17)
+        /* already in comparator
 	public int compareTo(Event rhs){
 		if(getMonth() != rhs.getMonth())
 			return getMonth() - rhs.getMonth();
@@ -60,5 +61,6 @@ public class Event implements Comparable{
 			return getEnd() - rhs.getEnd();
 		return 0;
 	}
+	*/
 
 }
