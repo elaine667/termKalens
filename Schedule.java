@@ -15,19 +15,16 @@ public class Schedule{
     public boolean isEmpty(){
  return _list.isEmpty();
     }
-
-    // adds in order : O(logN)
-    public boolean add(Event e){ // wont work yet, needs to return boolean if added; wont add if there is a sched conflict
-		_list.add(e);
-        int pos = _list.size() - 1;
-		while (pos > 0){
-		int parentPos = (pos - 1) / 2;
-		if( _c.compare(_list.get(pos), _list.get((pos - 1)/ 2)) >= 0) break;
-		_list.set(pos, _list.set(parentPos,_list.get(pos)));
-		pos = parentPos;
-		}
-		return true;
-    }
+    
+    public boolean add(Event e){
+    	for(int i =0;i < _list.length(); i){
+    		if (compare(e,_list[i])<= 0){
+		_list.add(i,e);
+		return true; }
+		else if (compare(e,_list[i]) = -100)
+			return false;
+		}	
+	}
 
     // O(logN)
     public Event remove(int i){
