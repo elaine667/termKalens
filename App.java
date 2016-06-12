@@ -49,21 +49,22 @@ public class App{
 				System.out.println("i.e. 06/12 for 6am to 12pm, 14/18 for 2pm to 6pm: ");
 				String times = sc.nextLine();
 				if(next.length() == 5){
-					String a = next.substring(0,2);
-					String b = next.substring(3,5);
-					int j = 0;
-					int s = 0;
-					if(isInteger(a) && isInteger(b)){
-						j = Integer.parseInt(a); // month
-						s = Integer.parseInt(b); // day
+					String s = next.substring(0,2);
+					String e = next.substring(3,5);
+					int st = 0;
+					int en = 0;
+					if(isInteger(s) && isInteger(e)){
+						st = Integer.parseInt(a); // start
+						en = Integer.parseInt(b); // end
 					}
 					else{
-						System.out.println("Please enter a valid mm/dd combination");
+						System.out.println("Please enter a valid ss/ee combination");
 						System.out.println();
 						continue OVERALL; // allows us to just skip the rest of the code and start from the beginning
 					}
+				}
 				else{
-					System.out.println("Please enter a valid mm/dd combination");
+					System.out.println("Please enter a valid ss/ee combination");
 					System.out.println();
 				}
 				if(times.equals("cancel")){
@@ -90,6 +91,10 @@ public class App{
 				System.out.println();
 			}
 		}
+	}
+	
+	public void addEvents(){
+		
 	}
 	
 	public static boolean isInteger(String a) {
