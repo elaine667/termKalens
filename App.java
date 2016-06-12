@@ -76,15 +76,13 @@ public class App{
 				if(pri.length() == 1 && isInteger(pri))
 					Event event = new Event(title,desc,j,s,)
 				Date temp = new Date(j,s,new Schedule());
-				boolean added = false;
 				boolean conflict = false;
 				for(Date e : calendar){
 					if(e.equals(temp)){
-						conflict = !e.addEvent(event);
-						added = true;
+						conflict = !e.addEvent(event); // addEvent should return a boolean on whether or not the event can be added
 					}
 				}
-				if(!added)
+				if(conflict)
 					calendar.offer(temp);
 			}
 			else{

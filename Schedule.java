@@ -17,7 +17,7 @@ public class Schedule{
     }
 
     // adds in order : O(logN)
-    public void add(Event e){
+    public boolean add(Event e){ // wont work yet, needs to return boolean if added; wont add if there is a sched conflict
 		_list.add(e);
         int pos = _list.size() - 1;
 		while (pos > 0){
