@@ -1,10 +1,11 @@
-public class Event implements Comparable{
+public class Event{
 
-	private String _event;
+	private String _event, _description;
 	private int _month, _day, _startHr, _endHr, _priority;
 	
-	public Event(String event, int month, int day, int start, int end, int priority){
+	public Event(String event, String desc, int month, int day, int start, int end, int priority){
 		_event = event;
+		_description = desc;
 		_month = month;
 		_day = day;
 		_startHr = start;
@@ -12,8 +13,9 @@ public class Event implements Comparable{
 		_priority = priority;
 	}
 	
-	public Event(String event, int month, int day, int start, int end){
+	public Event(String event, String desc, int month, int day, int start, int end){
 		_event = event;
+		_description = desc;
 		_month = month;
 		_day = day;
 		_startHr = start;

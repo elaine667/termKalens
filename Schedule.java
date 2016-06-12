@@ -18,14 +18,14 @@ public class Schedule{
 
     // adds in order : O(logN)
     public void add(Event e){
-  _list.add(e);
+		_list.add(e);
         int pos = _list.size() - 1;
-  while (pos > 0){
-     int parentPos = (pos - 1) / 2;
-     if( _c.compare(_list.get(pos), _list.get((pos - 1)/ 2)) >= 0) break;
-     _list.set(pos, _list.set(parentPos,_list.get(pos)));
-     pos = parentPos;
-  }
+		while (pos > 0){
+		int parentPos = (pos - 1) / 2;
+		if( _c.compare(_list.get(pos), _list.get((pos - 1)/ 2)) >= 0) break;
+		_list.set(pos, _list.set(parentPos,_list.get(pos)));
+		pos = parentPos;
+		}
     }
 
     // O(logN)

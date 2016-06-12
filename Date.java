@@ -24,4 +24,13 @@ public class Date{
  public Schedule getSchedule(){
   return _s;
  }
+ 
+ public boolean addEvent(Event e){
+	 return _s.add(e);
+ }
+ 
+ public boolean equals(Object o){
+	 Date d = (Date) o;
+	 return getMonth() == d.getMonth() && getDate() == d.getDate();
+ }
 }
