@@ -26,6 +26,7 @@ public class Schedule{
 		_list.set(pos, _list.set(parentPos,_list.get(pos)));
 		pos = parentPos;
 		}
+		return true;
     }
 
     // O(logN)
