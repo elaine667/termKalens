@@ -33,4 +33,9 @@ public class Date{
 	 Date d = (Date) o;
 	 return getMonth() == d.getMonth() && getDate() == d.getDate();
  }
+ 
+ public String toString(){
+	 return getMonth()+"/"+getDate();
+ }
+ 
 }

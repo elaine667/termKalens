@@ -47,6 +47,15 @@ public class Event{
 		return _priority;
 	}
 	
+	public boolean equals(Object o){
+	 Event e = (Event) o;
+	 return getEvent() == e.getEvent();
+ }
+ 
+	public String toString(){
+		return "Event: "+_event+" ; "+"Desc: "+_description;
+	}
+	
 	// compareTo override
 	// negative is higher priority (i.e day 1 is earlier than day 17)
         /* already in comparator

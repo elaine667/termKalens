@@ -12,18 +12,55 @@ public class App{
 		String next = "";
 		boolean quit = false;
 		OVERALL : while(!next.equals("quit") && !quit){
-			System.out.println("What would you like to do? 'add';'remove';'quit'");
+			System.out.println("What would you like to do? 'add'; 'remove'; 'quit'");
 			next = sc.nextLine();
 			if(next.equals("add"))
 				quit = addEvents(sc, calendar);
 			if(next.equals("remove"))
-				quit = false;
+				quit = removeEvents(sc, calendar);
 			if(next.equals("quit"))
 				quit = true;
 		}
 	}
 	
 	public static boolean removeEvents(Scanner sc, PriorityQueue<Date> calendar){
+		System.out.println("Would you like to remove an Event or clear a time? 'remove'; 'clear time'");
+		System.out.println("Enter cancel to cancel removal");
+		String next = sc.nextLine();
+		String option = next+"";
+		System.out.println("What day is the event/time? mm/dd");
+		next = sc.nextLine();
+		int j,s;
+		j = s = 0;
+		DATE: for(;;){
+			String a = next.substring(0,2);
+			String b = next.substring(3,5);
+			if(isInteger(a) && isInteger(b)){
+				j = Integer.parseInt(a); // month
+				s = Integer.parseInt(b); // day
+				break;
+			}
+			else{
+				System.out.println("Please enter a valid mm/dd combination");
+				System.out.println();
+				continue DATE; // allows us to just skip the rest of the code and start from the beginning
+			}
+		}
+		if(option.equals("remove")){
+			System.out.println("What event would you like to remove?");
+			next = sc.nextLine();
+			Event eventT = new Event(next,null,0,0,0,0,0);
+			Date dateT = new Date(j,s,null);
+			Object[] dateArr = calendar.toArray();
+			System.out.println(dateArr.length);
+			for(int i = 0; i < dateArr.length; i++){
+				System.out.println("checker");
+				Date d = (Date) dateArr[i];
+				if(d.equals(dateT)){
+					System.out.println(d.getSchedule().remove(eventT));
+				}
+			}
+		}
 		return false;
 	}
 	
