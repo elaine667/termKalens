@@ -111,6 +111,8 @@ public class App {
 		html += "<form method='post' action='/remove/:" + id + "'> ";
 		html += "What day is the event/time? mm/dd" +
 			"<input type='text' name='date'><br><br>";
+		html += "What event would you like to remove?" +
+			"<input type='text' name='event'><br><br>";
 		return html +
                     "<a href = /clear/:"+ id + ">Log Out</a><br>" +
                     "<a href = /home/:" + id + ">Home</a>" + ending;
