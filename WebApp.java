@@ -100,12 +100,20 @@ public class App {
             //SEEING THE SCHEDULE
             if (choice.equals("schedule")){
                 html += "lol";
+               	return html +
+                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
+                    "<a href = /home/:" + id + ">Home</a>" + ending;
             }
 
 	    //_________________________________________________________________
 	    //REMOVING AN EVENT
 	    if (choice.equals("remove")){
-		
+		html += "<form method='post' action='/remove/:" + id + "'> ";
+		html += "What day is the event/time? mm/dd" +
+			"<input type='text' name='date'><br><br>";
+		return html +
+                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
+                    "<a href = /home/:" + id + ">Home</a>" + ending;
 	    }
 
 	    //_________________________________________________________________
@@ -200,6 +208,10 @@ public class App {
             return html +
                     "<a href = /clear/:"+ id + ">Log Out</a><br>" +
                     "<a href = /home/:" + id + ">Home</a>" + ending;
+        });
+        
+        //REMOVING AN EVENT
+        get("/remove/:id", (request, response) -> {
         });
 
 
