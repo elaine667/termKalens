@@ -17,14 +17,16 @@ public class Schedule{
     }
     
     public boolean add(Event e){
+      if(_list.size() == 0)
+        _list.add(e);
+      else{
         for(int i =0;i < _list.size(); i++){
-            if (_c.compare(e,_list.get(i))<= 0){
-                _list.add(i,e);
-                return true; }
-           // else if (_c.compare(e,_list.get(i)) == -100)
-             //   return false;
+          if (_c.compare(e,_list.get(i))<= 0){
+            _list.add(i,e);
+            return true; }
         }
-        return false;
+      }
+      return false;
     }
     
     // O(logN)
@@ -83,6 +85,18 @@ public class Schedule{
     
     
     public String toString(){
-        return _list.toString();
+      String formatedString = _list.toString()
+        .replace(",", "")  //remove the commas
+        .replace("[", "")  //remove the right bracket
+        .replace("]", "")  //remove the left bracket
+        .trim();   
+      return formatedString;
+    }
+    
+    public static void main (String[] args){
+      Schedule x = new Schedule();
+      Event e = new Event ("a","a",1,1,1,1,1);
+      x.add(e);
+      System.out.println(x);
     }
 }
