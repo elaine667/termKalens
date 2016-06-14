@@ -174,11 +174,11 @@ public class App{
         Date temp = new Date(j,s,new Schedule());
         boolean conflict = false;
         for(Date e : calendar){
-            if(e.getMonth().equals(temp)){
+            if(e.equals(temp)){
                 conflict = !e.addEvent(event); // addEvent should return a boolean on whether or not the event can be added
             }
         }
-        if(conflict)
+        if(!conflict)
             calendar.offer(temp);
         return false;
     }
