@@ -33,7 +33,7 @@ public class App{
   }
   
   public static boolean removeEvents(Scanner sc, PriorityQueue<Date> calendar){
-    System.out.println("Would you like to remove an Event or clear a time? 'remove'; 'clear time'");
+    System.out.println("Would you like to remove an Event? 'remove'");
     System.out.println("Enter cancel to cancel removal");
     String next = sc.nextLine();
     String option = next+"";
@@ -62,19 +62,8 @@ public class App{
       else break;
     }
     if(option.equals("remove")){
-      System.out.println("What event would you like to remove?");
-      next = sc.nextLine();
-      Event eventT = new Event(next,null,0,0,0,0,0);
-      Date dateT = new Date(j,s,null);
-      Object[] dateArr = calendar.toArray();
-      System.out.println(dateArr.length);
-      for(int i = 0; i < dateArr.length; i++){
-        System.out.println("checker");
-        Date d = (Date) dateArr[i];
-        if(d.equals(dateT)){
-          System.out.println(d.getSchedule().remove(eventT));
-        }
-      }
+      Date a = new Date(j,s);
+      calendar.remove(a);
     }
     return false;
   }
