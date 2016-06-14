@@ -1,16 +1,16 @@
 import java.util.PriorityQueue;
-import java.util.Comparator;
+import java.util.ArrayList;
 import static spark.Spark.*;
 
-public class App {
+public class WebApp {
     private static String heading = "<!DOCTYPE html>" +
             "<html>" +
             "<head>" +
-            "<title>MyCalendar</title>" +
+            "<title>MyPlanner</title>" +
             "<link rel='stylesheet' + href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>" +
             "</head>" +
             "<body><center>" +
-            "<h1>My Calendar</h1>";
+            "<h1>My Planner</h1>";
     private static String ending = "</center></body></html>";
 
     public static void main(String[] args) {
@@ -20,15 +20,14 @@ public class App {
         get("/welcome", (request, response) -> {
             String html = heading;
             html +=
-                "<p>Welcome to MyCalendar. We'll help you keep track of your schedule!  Enter your name to get started.<p>" +
-                        "<form action=/logged> Name: <input type='text' name='uname'> <br>" +
-                        "Password: <input type = 'text' name='password'><br>" +
-                        "<input type='submit' value='Go!'>";
+                "<p>Welcome to MyPlanner. We'll help you keep track of your schedule!  Enter your name to get started.<p>" +
+                    "<form action=/logged> Name: <input type='text' name='uname'> <br>" +
+                    "Password: <input type = 'text' name='password'><br>" +
+                    "<input type='submit' value='Go!'>";
             return html + ending;
-            }
-        );
+        });
 
-	//==================================================================
+        //==================================================================
         //HOMEPAGE FOR LOGGED IN
         get("/logged", (request, response) -> {
             String name = request.queryParams("uname");
@@ -38,11 +37,11 @@ public class App {
             String id = a.getId();
             request.session().attribute("user", id);
             String html = heading + "<h2>You have successfully logged in!</h2>" +
-                    "<br><a href = /home/:" + id + ">To Homepage</a>";
+                "<br><a href = /home/:" + id + ">To Homepage</a>";
             return html + ending;
         });
 
-	//===================================================================
+        //===================================================================
         get("/home/:id", (request, response) -> {
             String id = request.params("id").substring(1);
             String username = users.getUser(id).getName();
@@ -58,10 +57,9 @@ public class App {
                     "<br><br><br>" +
                     "<a href = /clear/:"+ id + ">Log Out</a>";
             return html + ending;
-            }
-        );
+        });
 
-	//=====================================================================
+        //=====================================================================
         //LOG OUT
         get("/clear/:id", (request, response) -> {
             String id = request.params("id").substring(1);
@@ -70,23 +68,27 @@ public class App {
                     + "<a href = /welcome>Log In</a>" + ending;
         });
 
-	//=====================================================================
+
+
+        //=====================================================================
         //USER'S ACTIONS
         get("/choice/:id", (request, response) -> {
             String html = heading;
             String id = request.params("id").substring(1);
+            User user = users.getUser(id);
+            PriorityQueue<Date> planner = user.getPlanner();
             String choice = request.queryParams("choice");
 
-	    //________________________________________________________________
+            //________________________________________________________________
             //ADDING FRIENDS
             if (choice.equals("friend")) {
-                if (users.getSize() != 0) {
-                    html += "<h2>Available users: </h2><form method = 'post' action = /friend/:" + id + ">";
+                if (users.getSize() > 1) {
+                    html += "<h2>Available users: </h2><form action = /friend/:" + id + ">";
                     for (int i = 0; i < users.getSize(); i++) {
                         User friend = users.getUser(i);
                         if (!friend.getId().equals(id)) {
                             html += "<input type='radio' name='friend' value='";
-                            html += friend.getName();
+                            html += friend.getId();
                             html += "'>";
                             html += friend.getName() + "<br>";
                         }
@@ -96,32 +98,45 @@ public class App {
                 else html += "<h2>No available users</h2><br><a href= /home/:" + id + ">Go Back</a><br><br>";
             }
 
-	    //_________________________________________________________________
+            //_________________________________________________________________
             //SEEING THE SCHEDULE
-            if (choice.equals("schedule")){
-                html += "lol";
-               	return html +
-                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
-                    "<a href = /home/:" + id + ">Home</a>" + ending;
+            if (choice.equals("schedule")) {
+                html += "<h2>Your Schedule:</h2><table border='1' style='width:50%'>";
+                Date[] plannerArray = planner.toArray(new Date[0]);
+                for (int i = 0; i < plannerArray.length; i++){
+                    html += "<tr><td>" + plannerArray[i] + "</td><td>" + plannerArray[i].getSchedule() + "</td></tr>";
+                }
+                return html +
+                        "</table><br>" +
+                        "<a href = /home/:" + id + ">Home</a><br>" +
+                        "<a href = /clear/:" + id + ">Log Out</a>" + ending;
+
             }
 
-	    //_________________________________________________________________
-	    //REMOVING AN EVENT
-	    if (choice.equals("remove")){
-		html += "<form method='post' action='/remove/:" + id + "'> ";
-		html += "What day is the event/time? mm/dd" +
-			"<input type='text' name='date'><br><br>";
-		html += "What event would you like to remove?" +
-			"<input type='text' name='event'><br><br>";
-		return html +
-                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
-                    "<a href = /home/:" + id + ">Home</a>" + ending;
-	    }
+            //_________________________________________________________________
+            //REMOVING AN EVENT
+            if (choice.equals("remove")) {
+                html += "<h2>Your Schedule:</h2><table border='1' style='width:50%'>";
+                Date[] plannerArray = planner.toArray(new Date[0]);
+                for (int i = 0; i < plannerArray.length; i++){
+                    html += "<tr><td>" + plannerArray[i] + "</td><td>" + plannerArray[i].getSchedule() + "</td></tr>";
+                }
+                html += "</table><br><br>";
+                html += "<form action='/remove/:" + id + "'> ";
+                html += "What day is the event/time? mm/dd? " +
+                        "<input type='text' name='date'><br><br>";
+                html += "What event would you like to remove? " +
+                        "<input type='text' name='event'><br><br>";
+                html += "<input type = 'submit' value = 'Go!'><br><br>";
+                return html +
+                        "<a href = /home/:" + id + ">Home</a><br>" +
+                        "<a href = /clear/:" + id + ">Log Out</a>" + ending;
+            }
 
-	    //_________________________________________________________________
+            //_________________________________________________________________
             //ADDING AN EVENT
-            if (choice.equals("add")){
-                html += "<form method='post' action='/add/:" + id +"'> ";
+            if (choice.equals("add")) {
+                html += "<form action='/add/:" + id + "'> ";
                 html += "Enter the number corresponding to a date within this year " +
                         "i.e. 06/12 for June 12th, 12/01 for December 1st: " +
                         "<input type='text' name='date'><br><br>";
@@ -140,30 +155,32 @@ public class App {
                         "<input type='radio' name='priority' value='5'> 5<br>";
                 html += "<input type='submit' value='Go!'><br><br><br>";
             }
+
             return html +
-                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
-                    "<a href = /home/:" + id + ">Home</a>" + ending;
-	    }
+                    "<a href = /home/:" + id + ">Home</a><br>" +
+                    "<a href = /clear/:" + id + ">Log Out</a>" + ending;
         });
-	//=====================================================================
+
+        //=====================================================================
         //ACTUAL PAGES
-	//ADDING FRIENDS
-        get("/friend/:id", (request, response) ->{
+        //ADDING FRIENDS
+        get("/friend/:id", (request, response) -> {
             String id = request.params("id").substring(1);
-            User friend = users.getUser(request.queryParams("friendrequest"));
+            User friend = users.getUser(request.queryParams("friendrequest").substring(1));
             users.getUser(id).getFriends().add(friend);
             response.redirect("/home/:" + id);
             return heading +
                     "<h2>You are now friends with " + friend.getName() +"!</h2>" +
-                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
-                    "<a href = /home/:" + id + ">Home</a>" + ending;
+                    "<a href = /home/:" + id + ">Home</a><br>" +
+                    "<a href = /clear/:" + id + ">Log Out</a>" + ending;
         });
 
         //ADDING AN EVENT
         get("/add/:id", (request, response) -> {
             String html = heading;
             String id = request.params("id").substring(1);
-            PriorityQueue<Date> calendar = users.getUser(id).getCalendar();
+            User user = users.getUser(id);
+            PriorityQueue<Date> planner = user.getPlanner();
             String date = request.queryParams("date");
             String title = request.queryParams("title");
             String description = request.queryParams("description");
@@ -171,53 +188,87 @@ public class App {
             int j,s,st,en;
             j = s = st = en = 0;
             int priority = Integer.parseInt(request.queryParams("priority"));
-	    int slash;
-	    if (date.indexOf("/")!=-1)
-		slash = date.indexOf("/");
-	    else comboError("date");
-            String a = date.substring(0,2);
-            String b = date.substring(3,5);
-            if (isInteger(a) && isInteger(b)){
-                j = Integer.parseInt(a); // month
-                s = Integer.parseInt(b); // day
-            }
-            if (j < 0 || j > 12 || s < 0 || s > 31){
-                comboError("date");        
-            }
-            if (times.indexOf("/")!=-1)
-		slash = times.indexOf("/");
-	    else comboError("date");
-            a = times.substring(0,slash);
-            b = times.substring(slash+1);
-            if (isInteger(a) && isInteger(b)){
-                st = Integer.parseInt(a); 
-                en = Integer.parseInt(b); 
-            }
-            if (st < 0 || en > 24 || st < 0 || en > 24 || st>en){
-                comboError("time");        
-            }
-            Event event = new Event(title,description,j,s,0,0,priority);
-            Date temp = new Date(j,s,new Schedule());
-            boolean conflict = false;
-            for(Date e : calendar){
-                if(e.equals(temp)){
-                    conflict = !e.addEvent(event); // addEvent should return a boolean on whether or not the event can be added
+
+
+            if (date.indexOf("/")!=-1) {
+                int slash = date.indexOf("/");
+                String a = date.substring(0, slash);
+                String b = date.substring(slash + 1);
+                if (isInteger(a) && isInteger(b)) {
+                    j = Integer.parseInt(a); // month
+                    s = Integer.parseInt(b); // day
+                }
+                if (j < 0 || j > 12 || s < 0 || s > 31) {
+                    comboError("date", "html");
                 }
             }
-            if(conflict)
-                calendar.offer(temp);
-                html += "Event successfully added! Go back to do something else.";
+            else comboError("date", "html");
+
+            if (times.indexOf("/")!=-1) {
+                int slash = times.indexOf("/");
+                String a = times.substring(0, slash);
+                String b = times.substring(slash + 1);
+                if (isInteger(a) && isInteger(b)) {
+                    st = Integer.parseInt(a);
+                    en = Integer.parseInt(b);
+                }
+                if (st < 0 || en > 24 || st < 0 || en > 24 || st>en){
+                    comboError("time", "html");
+                }
+            }
+            else comboError("time", "html");
+
+            Event event = new Event(title,description,j,s,st,en,priority);
+            Schedule x = new Schedule();
+            Date temp = new Date(j,s,x);
+            //boolean conflict = false;
+            temp.addEvent(event);
+            planner.add(temp);
+            html += "Event successfully added! Go back to do something else.<br>";
             return html +
-                    "<a href = /clear/:"+ id + ">Log Out</a><br>" +
-                    "<a href = /home/:" + id + ">Home</a>" + ending;
+                    "<a href = /home/:" + id + ">Home</a><br>" +
+                    "<a href = /clear/:" + id + ">Log Out</a>" + ending;
         });
-        
+
         //REMOVING AN EVENT
         get("/remove/:id", (request, response) -> {
+            String html = heading;
+            String id = request.params("id").substring(1);
+            User user = users.getUser(id);
+            PriorityQueue<Date> planner = user.getPlanner();
+            Date[] plannerArray = planner.toArray(new Date[0]);
+            String date = request.queryParams("date");
+            String event = request.queryParams("event");
+            int j,s;
+            j = s = 0;
+
+            if (date.indexOf("/")!=-1) {
+                int slash = date.indexOf("/");
+                String a = date.substring(0, slash);
+                String b = date.substring(slash + 1);
+                if (isInteger(a) && isInteger(b)) {
+                    j = Integer.parseInt(a); // month
+                    s = Integer.parseInt(b); // day
+                }
+                if (j < 0 || j > 12 || s < 0 || s > 31) {
+                    comboError("date", "html");
+                }
+            }
+            else comboError("date", "html");
+            Date a = new Date(j,s);
+            planner.remove(a);
+
+
+            html += "Event successfully removed! Go back to do something else.<br>";
+            return html +
+                    "<a href = /home/:" + id + ">Home</a><br>" +
+                    "<a href = /clear/:" + id + ">Log Out</a>" + ending;
         });
+
 
 
     }
+
 
 
     //===================================================================
@@ -233,10 +284,12 @@ public class App {
         }
         return true;
     }
-    public static void comboError(String type){
+
+
+    public static void comboError(String type, String html){
         if (type.equals("date"))
-	    html += "Please go back and enter a valid mm/dd combination";
-	if(type.equals("time"))
+            html += "Please go back and enter a valid mm/dd combination";
+        if(type.equals("time"))
             html += "Please enter a valid start/end combination";
     }
 }

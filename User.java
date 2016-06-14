@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
-public class User implements Comparable{
+public class User{
     private String id, password, name;
     private ArrayList<User> friends;
-    private PriorityQueue<Date> calendar;
+    private PriorityQueue<Date> planner;
 
     public User(String uname, String pword){
         id = uname + (int)(Math.random()*100);
@@ -13,8 +13,7 @@ public class User implements Comparable{
         password = pword;
         friends = new ArrayList<User>();
         Comparator<Date> comp = new DateComparator<Date>();
-        PriorityQueue<Date> calendar = new PriorityQueue<Date>(1,comp);
-
+        planner = new PriorityQueue<Date>(1,comp);
     }
 
     public String getId(){
@@ -33,13 +32,10 @@ public class User implements Comparable{
         return password;
     }
 
-    public PriorityQueue<Date> getCalendar(){
-        return calendar;
+    public PriorityQueue<Date> getPlanner(){
+        return planner;
     }
 
-    public int compareTo(Object rhs){
-        String x = this.getId();
-        String y = ((User)rhs).getId();
-        return x.compareTo(y);
-    }
+
+
 }

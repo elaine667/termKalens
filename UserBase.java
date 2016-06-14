@@ -68,6 +68,7 @@ public class UserBase {
         return _users.get(pos);
     }
 
+    /*
     public static void main(String [] args){
         UserBase a = new UserBase();
         User b = new User("b", "b");
@@ -86,6 +87,7 @@ public class UserBase {
         a.remove(d.getId());
         System.out.println(a);
     }
+    */
 
     
 }

@@ -2,33 +2,33 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Schedule{
-    
+
     private ArrayList<Event> _list;
     private Comparator<Event> _c;
-    
-    
+
+
     public Schedule(){
         _list = new ArrayList<Event>();
         _c = new EventComparator();
     }
-    
+
     public boolean isEmpty(){
         return _list.isEmpty();
     }
-    
+
     public boolean add(Event e){
-      if(_list.size() == 0)
-        _list.add(e);
-      else{
-        for(int i =0;i < _list.size(); i++){
-          if (_c.compare(e,_list.get(i))<= 0){
-            _list.add(i,e);
-            return true; }
+        if(_list.size() == 0)
+            _list.add(e);
+        else{
+            for(int i =0;i < _list.size(); i++){
+                if (_c.compare(e,_list.get(i))<= 0){
+                    _list.add(i,e);
+                    return true; }
+            }
         }
-      }
-      return false;
+        return false;
     }
-    
+
     // O(logN)
     public Event remove(int i){
         Event ans = _list.get(i);
@@ -46,14 +46,14 @@ public class Schedule{
         }
         return ans;
     }
-    
+
     public Event remove(Event a){
         return remove(eventPos(a));
     }
     public Event remove(){
         return remove(0);
     }
-    
+
     private int eventPos(Event a){
         int pos=0;
         while (!_list.get(pos).equals(a)){
@@ -61,7 +61,7 @@ public class Schedule{
         }
         return pos;
     }
-    
+
     // return -1 if  pos has no children
     // otherwise returns the minmum child
     private int minChildPos(int pos){
@@ -75,28 +75,28 @@ public class Schedule{
         if (_c.compare(_list.get(left), _list.get(right)) <= 0) return left;
         return right;
     }
-    
-    
-    
+
+
+
     // O(1)
     public Event peekMin(){
         return _list.get(0);
     }
-    
-    
+
+
     public String toString(){
-      String formatedString = _list.toString()
-        .replace(",", "")  //remove the commas
-        .replace("[", "")  //remove the right bracket
-        .replace("]", "")  //remove the left bracket
-        .trim();   
-      return formatedString;
+        String formatedString = _list.toString()
+                .replace(",", "<br><br>")  //remove the commas
+                .replace("[", "")  //remove the right bracket
+                .replace("]", "")  //remove the left bracket
+                .trim();
+        return formatedString;
     }
-    
+
     public static void main (String[] args){
-      Schedule x = new Schedule();
-      Event e = new Event ("a","a",1,1,1,1,1);
-      x.add(e);
-      System.out.println(x);
+        Schedule x = new Schedule();
+        Event e = new Event ("a","a",1,1,1,1,1);
+        x.add(e);
+        System.out.println(x);
     }
 }
