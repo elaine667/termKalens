@@ -21,6 +21,8 @@ public class Schedule{
             if (_c.compare(e,_list.get(i))<= 0){
                 _list.add(i,e);
                 return true; }
+           // else if (_c.compare(e,_list.get(i)) == -100)
+             //   return false;
         }
         return false;
     }
